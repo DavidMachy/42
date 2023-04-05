@@ -1,4 +1,4 @@
-SRC = ft_printf.c ft_functs.c
+SRC = ft_printf.c ft_printf_helper.c
 OBJ = ${SRC:.c=.o}
 NAME = libftprintf.a
 HEADER := ft_printf.h

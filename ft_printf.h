@@ -6,7 +6,7 @@
 /*   By: dmachace <dmachace@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 10:26:33 by dmachace          #+#    #+#             */
-/*   Updated: 2023/03/16 11:08:52 by dmachace         ###   ########.fr       */
+/*   Updated: 2023/03/17 15:08:20 by dmachace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-void	ft_putchar(int c, int *len);
-void	ft_putstr(char *s, int *len);
+void	ft_printf_putchar(int c, int *len);
+void	ft_printf_putstr(char *s, int *len);
 void	ft_nbr(int n, int *len);
 void	ft_nbr_unsig(unsigned int n, int *len);
 void	ft_conv_hex(unsigned long long n, char form, int *len);

@@ -6,7 +6,7 @@
 /*   By: dmachace <dmachace@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 10:28:19 by dmachace          #+#    #+#             */
-/*   Updated: 2023/03/16 14:42:53 by dmachace         ###   ########.fr       */
+/*   Updated: 2023/03/17 15:09:17 by dmachace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,20 @@ void	ft_void_point(unsigned long long n, int *len)
 {
 	if (n != 0)
 	{
-		ft_putchar('0', len);
-		ft_putchar('x', len);
+		ft_printf_putchar('0', len);
+		ft_printf_putchar('x', len);
 		ft_conv_hex(n, 'x', len);
 	}
 	else
-		ft_putstr("(nil)", len);
+		ft_printf_putstr("(nil)", len);
 }
 
 void	ft_form_check(va_list *args, char form, int *len)
 {
 	if (form == 'c')
-		ft_putchar(va_arg(*args, int), len);
+		ft_printf_putchar(va_arg(*args, int), len);
 	else if (form == 's')
-		ft_putstr(va_arg(*args, char *), len);
+		ft_printf_putstr(va_arg(*args, char *), len);
 	else if (form == 'p')
 		ft_void_point(va_arg(*args, unsigned long long), len);
 	else if (form == 'd' || form == 'i')
@@ -39,7 +39,7 @@ void	ft_form_check(va_list *args, char form, int *len)
 	else if (form == 'x' || form == 'X')
 		ft_conv_hex(va_arg(*args, unsigned int), form, len);
 	else if (form == '%')
-		ft_putchar('%', len);
+		ft_printf_putchar('%', len);
 }
 
 int	ft_printf(const char *form, ...)
@@ -59,7 +59,7 @@ int	ft_printf(const char *form, ...)
 			i++;
 		}
 		else
-			ft_putchar((char)form[i], &len);
+			ft_printf_putchar((char)form[i], &len);
 		i++;
 	}
 	va_end(args);

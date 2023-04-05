@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_functs.c                                        :+:      :+:    :+:   */
+/*   ft_printf_helper.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmachace <dmachace@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 11:38:07 by dmachace          #+#    #+#             */
-/*   Updated: 2023/03/16 14:36:44 by dmachace         ###   ########.fr       */
+/*   Updated: 2023/03/17 15:07:26 by dmachace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-void	ft_putchar(int c, int *len)
+void	ft_printf_putchar(int c, int *len)
 {
 	write(1, &c, 1);
 	*len += 1;
 }
 
-void	ft_putstr(char *s, int *len)
+void	ft_printf_putstr(char *s, int *len)
 {
 	int	i;
 
@@ -45,20 +45,20 @@ void	ft_nbr(int n, int *len)
 		*len += 11;
 	}
 	else if (n == 0)
-		ft_putchar('0', len);
+		ft_printf_putchar('0', len);
 	else
 	{
 		if (n < 0)
 		{
-			ft_putchar('-', len);
+			ft_printf_putchar('-', len);
 			n = -n;
 		}
 		if (n < 10)
-			ft_putchar(n + '0', len);
+			ft_printf_putchar(n + '0', len);
 		else
 		{
 			ft_nbr(n / 10, len);
-			ft_putchar(n % 10 + '0', len);
+			ft_printf_putchar(n % 10 + '0', len);
 		}
 	}
 }
@@ -66,11 +66,11 @@ void	ft_nbr(int n, int *len)
 void	ft_nbr_unsig(unsigned int n, int *len)
 {
 	if (n < 10)
-		ft_putchar(n + '0', len);
+		ft_printf_putchar(n + '0', len);
 	else
 	{
 		ft_nbr_unsig(n / 10, len);
-		ft_putchar(n % 10 + '0', len);
+		ft_printf_putchar(n % 10 + '0', len);
 	}
 }
 
@@ -84,13 +84,13 @@ void	ft_conv_hex(unsigned long long n, char form, int *len)
 	else
 	{
 		if (n < 10)
-			ft_putchar(n + '0', len);
+			ft_printf_putchar(n + '0', len);
 		else
 		{
 			if (form == 'x')
-				ft_putchar(n + 87, len);
+				ft_printf_putchar(n + 87, len);
 			if (form == 'X')
-				ft_putchar(n + 55, len);
+				ft_printf_putchar(n + 55, len);
 		}
 	}
 }

@@ -1,30 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmachace <dmachace@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/08 10:26:33 by dmachace          #+#    #+#             */
-/*   Updated: 2023/03/17 15:08:20 by dmachace         ###   ########.fr       */
+/*   Created: 2023/03/17 13:55:54 by dmachace          #+#    #+#             */
+/*   Updated: 2023/03/31 16:27:04 by dmachace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
-# include <stdarg.h>
-# include <stdio.h>
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 1000
+# endif
+
+# include <fcntl.h>
 # include <stdlib.h>
 # include <unistd.h>
 
-void	ft_printf_putchar(int c, int *len);
-void	ft_printf_putstr(char *s, int *len);
-void	ft_nbr(int n, int *len);
-void	ft_nbr_unsig(unsigned int n, int *len);
-void	ft_conv_hex(unsigned long long n, char form, int *len);
-void	ft_void_point(unsigned long long n, int *len);
-void	ft_form_check(va_list *args, char form, int *len);
-int		ft_printf(const char *form, ...);
+char	*get_next_line(int fd);
+char	*text_read(int fd, char *res);
+char	*find_line(char *buff);
+char	*del_line(char *buff);
+
+void	ft_bzero(void *s, size_t n);
+void	*ft_calloc(size_t nmemb, size_t size);
+char	*ft_strchr(const char *s, int c);
+size_t	ft_strlen(const char *str);
+char	*ft_strjoin(char const *s1, char const *s2);
 
 #endif

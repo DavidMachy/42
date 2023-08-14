@@ -1,0 +1,6 @@
+
+
+Fraktaly: Mandelbrot == z^2 + c kde c je promenna
+tam kde funkce s c a iteraci zustava v mensi nez nekonecno-> vybarvit cerne
+tam kde funkce s c a iteraci vystreli do nekonecna -> barevne
+--vysledek by mel byt Mandelbrot set

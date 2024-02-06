@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dmachace <dmachace@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:28:09 by marvin            #+#    #+#             */
-/*   Updated: 2024/01/18 15:28:09 by marvin           ###   ########.fr       */
+/*   Updated: 2024/02/06 15:14:36 by dmachace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 long	ft_atol(const char *ptr)
 {
-	int	i;
-	int	s;
+	int		i;
+	int		s;
 	long	x;
 
 	i = 0;
@@ -40,12 +40,12 @@ long	ft_atol(const char *ptr)
 void	list_free(t_stack **stack)
 {
 	t_stack	*tmp;
-	
-	if(!stack || !*stack)
+
+	if (!stack || !*stack)
 		return ;
 	while (*stack)
 	{
-		tmp = *stack->next;
+		tmp = (*stack)->next;
 		free(*stack);
 		*stack = tmp;
 	}
@@ -54,8 +54,17 @@ void	list_free(t_stack **stack)
 
 void	args_error(t_stack **stack_a, t_stack **stack_b)
 {
-	list_free(stack_a);				//ifs ??
-	list_free(stack_b);
+	if (stack_a == NULL || *stack_a != NULL)
+		list_free(stack_a);
+	if (stack_b == NULL || *stack_b != NULL)
+		list_free(stack_b);
 	ft_putstr_fd("Error\n", 2);
 	exit(1);
+}
+
+int	ft_abs(int n)
+{
+	if (n < 0)
+		n *= -1;
+	return (n);
 }

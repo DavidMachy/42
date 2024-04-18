@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dmachace <dmachace@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 16:57:17 by marvin            #+#    #+#             */
-/*   Updated: 2024/02/24 16:57:17 by marvin           ###   ########.fr       */
+/*   Updated: 2024/04/18 18:40:24 by dmachace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	ft_atoi(const char *ptr)
 	return (x * s);
 }
 
-unsigned long get_time(void)
+unsigned long	get_time(void)
 {
 	struct timeval	tm;
 	unsigned long	time_ms;
@@ -47,22 +47,30 @@ unsigned long get_time(void)
 	return (time_ms);
 }
 
-void message(t_philo *philo, char *text)
+void	message(t_philo *philo, char *text)
 {
 	pthread_mutex_lock(&philo->box->message);
-	printf("%lu %d %s\n", get_time - philo->box->time_init, philo->id, text);
+	if (philo->box->alive)
+	{
+		printf("Time:%lu Philo:%d %s\n", (get_time() - philo->box->time_init),
+			philo->id, text);
+	}
 	pthread_mutex_unlock(&philo->box->message);
 }
 
 int	alive_check(t_philo *philo)
 {
-	if (philo->box->alive == false || (get_time() - philo->last_ate >= philo->box->time_to_die))
+	pthread_mutex_lock(&philo->box->live_laugh_love);
+	if (philo->box->alive == false || (get_time()
+			- philo->last_ate >= (unsigned long)philo->box->time_to_die))
 	{
 		message(philo, "died");
 		philo->box->alive = false;
 		drop_forks(philo);
+		pthread_mutex_unlock(&philo->box->live_laugh_love);
 		return (0);
 	}
+	pthread_mutex_unlock(&philo->box->live_laugh_love);
 	return (1);
 }
 
@@ -73,13 +81,12 @@ void	frees(t_box *box)
 	i = 0;
 	while (i < box->num_of_philos)
 	{
-		if (box->threads)
-			pthread_detach(box->threads[i]);
 		if (box->forks)
 			pthread_mutex_destroy(&box->forks[i]);
 		i++;
 	}
 	pthread_mutex_destroy(&box->message);
+	pthread_mutex_destroy(&box->live_laugh_love);
 	free(box->forks);
 	free(box->threads);
 	free(box->philos);

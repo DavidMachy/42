@@ -1,0 +1,87 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/24 16:57:17 by marvin            #+#    #+#             */
+/*   Updated: 2024/02/24 16:57:17 by marvin           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "philo.h"
+
+int	ft_atoi(const char *ptr)
+{
+	int	i;
+	int	s;
+	int	x;
+
+	i = 0;
+	while (ptr[i] == 32 || (ptr[i] >= 9 && ptr[i] <= 13))
+		i++;
+	s = 1;
+	if (ptr[i] == '-' || ptr[i] == '+')
+	{
+		if (ptr[i] == '-')
+			s = s * -1;
+		i++;
+	}
+	x = 0;
+	while (ptr[i] >= 48 && ptr[i] <= 57)
+	{
+		x = x * 10 + (ptr[i] - 48);
+		i++;
+	}
+	return (x * s);
+}
+
+unsigned long get_time(void)
+{
+	struct timeval	tm;
+	unsigned long	time_ms;
+
+	gettimeofday(&tm, NULL);
+	time_ms = tm.tv_sec * 1000 + tm.tv_usec / 1000;
+	return (time_ms);
+}
+
+void message(t_philo *philo, char *text)
+{
+	pthread_mutex_lock(&philo->box->message);
+	printf("%lu %d %s\n", get_time - philo->box->time_init, philo->id, text);
+	pthread_mutex_unlock(&philo->box->message);
+}
+
+int	alive_check(t_philo *philo)
+{
+	if (philo->box->alive == false || (get_time() - philo->last_ate >= philo->box->time_to_die))
+	{
+		message(philo, "died");
+		philo->box->alive = false;
+		drop_forks(philo);
+		return (0);
+	}
+	return (1);
+}
+
+void	frees(t_box *box)
+{
+	int	i;
+
+	i = 0;
+	while (i < box->num_of_philos)
+	{
+		if (box->threads)
+			pthread_detach(box->threads[i]);
+		if (box->forks)
+			pthread_mutex_destroy(&box->forks[i]);
+		i++;
+	}
+	pthread_mutex_destroy(&box->message);
+	free(box->forks);
+	free(box->threads);
+	free(box->philos);
+	free(box);
+}

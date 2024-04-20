@@ -6,7 +6,7 @@
 /*   By: dmachace <dmachace@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 16:57:31 by marvin            #+#    #+#             */
-/*   Updated: 2024/04/18 17:21:05 by dmachace         ###   ########.fr       */
+/*   Updated: 2024/04/20 16:36:28 by dmachace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@ typedef struct s_box
 	struct s_philo	*philos;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	live_laugh_love;
+	pthread_mutex_t	satisfaction;
 	pthread_mutex_t	message;
+	pthread_mutex_t	timing;
 	pthread_t		*threads;
 	pthread_t		life_checker;
 	bool			alive;
@@ -49,11 +51,13 @@ typedef struct s_philo
 }					t_philo;
 
 /* Main */
-void				*routine(void *philo_arg);
 void				loner(t_philo *philo);
+void				*life_checker_boi(void *box_arg);
+void				*routine(void *philo_arg);
 
 /* Init */
 int					arg_check(int ac, char **av);
+void				init_mutexes(t_box *box);
 t_philo				*init_philo(int id, t_box *box);
 t_box				*init(int ac, char **av);
 

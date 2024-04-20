@@ -6,7 +6,7 @@
 /*   By: dmachace <dmachace@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 16:52:29 by marvin            #+#    #+#             */
-/*   Updated: 2024/04/18 18:39:07 by dmachace         ###   ########.fr       */
+/*   Updated: 2024/04/20 17:00:53 by dmachace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,15 @@ void	*life_checker_boi(void *box_arg)
 	while (1)
 	{
 		i = -1;
-		while(++i < box->num_of_philos)
+		while (++i < box->num_of_philos)
 			alive_check(&box->philos[i]);
+		pthread_mutex_lock(&box->live_laugh_love);
 		if (!(box->alive))
+		{
+			pthread_mutex_unlock(&box->live_laugh_love);
 			break ;
+		}
+		pthread_mutex_unlock(&box->live_laugh_love);
 		usleep(1000);
 	}
 	return (NULL);
@@ -60,14 +65,18 @@ void	*routine(void *philo_arg)
 		return (loner(philo), NULL);
 	philo->forks[0] = &box->forks[philo->id % box->num_of_philos];
 	philo->forks[1] = &box->forks[philo->id - 1];
+	pthread_mutex_lock(&philo->box->live_laugh_love);
 	while (box->alive == true)
 	{
+		pthread_mutex_unlock(&philo->box->live_laugh_love);
 		if (philo->id % 2 == 1 && philo->meal_count == 0)
 			usleep(60 * 1000);
 		philo_eat(philo);
 		philo_sleep(philo);
 		philo_think(philo);
+		pthread_mutex_lock(&philo->box->live_laugh_love);
 	}
+	pthread_mutex_unlock(&philo->box->live_laugh_love);
 	return (NULL);
 }
 
@@ -81,8 +90,6 @@ int	main(int ac, char **av)
 		box = init(ac, av);
 	else
 		return (0);
-	box->alive = true;
-	box->satisfied = 0;
 	box->time_init = get_time();
 	i = -1;
 	while (++i < box->num_of_philos)
@@ -91,11 +98,12 @@ int	main(int ac, char **av)
 		pthread_create(&(box->threads[i]), NULL, routine, (void *)philo);
 	}
 	if (box->num_of_philos > 1)
-		pthread_create(&(box->life_checker), NULL, life_checker_boi, (void *)box);
+		pthread_create(&(box->life_checker), NULL, life_checker_boi,
+			(void *)box);
 	i = -1;
 	while (++i < box->num_of_philos)
 		pthread_join((box->threads[i]), NULL);
-	pthread_join((box->life_checker), NULL);
-	frees(box);
-	return (0);
+	if (box->num_of_philos > 1)
+		pthread_join((box->life_checker), NULL);
+	return (frees(box), 0);
 }

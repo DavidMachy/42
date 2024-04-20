@@ -6,7 +6,7 @@
 /*   By: dmachace <dmachace@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 09:31:03 by marvin            #+#    #+#             */
-/*   Updated: 2024/04/18 17:24:26 by dmachace         ###   ########.fr       */
+/*   Updated: 2024/04/20 16:36:48 by dmachace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,14 @@ int	arg_check(int ac, char **av)
 	if (ac == 6 && ft_atoi(av[5]) < 0)
 		return (printf("Invalid optional arg\n"), 0);
 	return (1);
+}
+
+void	init_mutexes(t_box *box)
+{
+	pthread_mutex_init(&box->live_laugh_love, NULL);
+	pthread_mutex_init(&box->satisfaction, NULL);
+	pthread_mutex_init(&box->message, NULL);
+	pthread_mutex_init(&box->timing, NULL);
 }
 
 t_philo	*init_philo(int id, t_box *box)
@@ -50,15 +58,16 @@ t_box	*init(int ac, char **av)
 	box->threads = malloc(sizeof(pthread_t) * box->num_of_philos);
 	if (!box->philos || !box->forks || !box->threads)
 		return (frees(box), NULL);
+	init_mutexes(box);
 	i = -1;
 	while (++i < box->num_of_philos)
 		pthread_mutex_init(&box->forks[i], NULL);
-	pthread_mutex_init(&box->message, NULL);
-	pthread_mutex_init(&box->live_laugh_love, NULL);
+	box->alive = true;
 	box->time_to_die = ft_atoi(av[2]);
 	box->time_to_eat = ft_atoi(av[3]);
 	box->time_to_sleep = ft_atoi(av[4]);
 	box->times_must_eat = -1;
+	box->satisfied = 0;
 	if (ac == 6)
 		box->times_must_eat = ft_atoi(av[5]);
 	return (box);

@@ -6,7 +6,7 @@
 /*   By: dmachace <dmachace@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 16:52:29 by marvin            #+#    #+#             */
-/*   Updated: 2024/04/20 17:00:53 by dmachace         ###   ########.fr       */
+/*   Updated: 2024/04/25 13:49:25 by dmachace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,20 @@ void	loner(t_philo *philo)
 	return ;
 }
 
+void	ate_enough_check(t_box *box)
+{
+	pthread_mutex_lock(&box->satisfaction);
+	if (box->satisfied == box->num_of_philos)
+	{
+		pthread_mutex_unlock(&box->satisfaction);
+		pthread_mutex_lock(&box->live_laugh_love);
+		box->alive = false;
+		pthread_mutex_unlock(&box->live_laugh_love);
+		return ;
+	}
+	pthread_mutex_unlock(&box->satisfaction);
+}
+
 void	*life_checker_boi(void *box_arg)
 {
 	t_box	*box;
@@ -40,6 +54,7 @@ void	*life_checker_boi(void *box_arg)
 		i = -1;
 		while (++i < box->num_of_philos)
 			alive_check(&box->philos[i]);
+		ate_enough_check(box);
 		pthread_mutex_lock(&box->live_laugh_love);
 		if (!(box->alive))
 		{

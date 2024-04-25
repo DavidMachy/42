@@ -6,7 +6,7 @@
 /*   By: dmachace <dmachace@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 16:57:31 by marvin            #+#    #+#             */
-/*   Updated: 2024/04/20 16:36:28 by dmachace         ###   ########.fr       */
+/*   Updated: 2024/04/25 13:36:39 by dmachace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct s_philo
 
 /* Main */
 void				loner(t_philo *philo);
+void				ate_enough_check(t_box *box);
 void				*life_checker_boi(void *box_arg);
 void				*routine(void *philo_arg);
 

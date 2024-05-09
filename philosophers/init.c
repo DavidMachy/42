@@ -6,7 +6,7 @@
 /*   By: dmachace <dmachace@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 09:31:03 by marvin            #+#    #+#             */
-/*   Updated: 2024/04/20 16:36:48 by dmachace         ###   ########.fr       */
+/*   Updated: 2024/05/09 16:10:05 by dmachace         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,24 @@
 
 int	arg_check(int ac, char **av)
 {
+	int	i;
+	int j;
+	
 	if (ac != 5 && ac != 6)
 		return (printf("Wrong number of args\n"), 0);
 	if (ft_atoi(av[1]) < 1 || ft_atoi(av[2]) < 0 || ft_atoi(av[3]) < 0
-		|| ft_atoi(av[4]) < 0)
+		|| ft_atoi(av[4]) < 0 || (ac == 6 && ft_atoi(av[5]) < 0))
 		return (printf("Invalid args\n"), 0);
-	if (ac == 6 && ft_atoi(av[5]) < 0)
-		return (printf("Invalid optional arg\n"), 0);
+	i = 1;
+	while (av[i])
+	{
+		j = 0;
+		while ((av[i][j] < 48 || av[i][j] > 57 ) && av[i][j])
+			j++;
+		if (!av[i][j])
+			return (printf("Invalid args\n"), 0);
+		i++;
+	}
 	return (1);
 }
 
